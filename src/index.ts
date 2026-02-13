@@ -63,7 +63,7 @@ export default {
 	  );
 
 	  const reply = aiResponse.response ?? "";
-  
+   
 	  // Save AI reply
 	  await env.DB.prepare(
 		"INSERT INTO messages (user_id, role, content) VALUES (?, ?, ?)"

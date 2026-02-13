@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI Study Buddy</title>
+</head>
+<body>
+  <h1>AI Interview Study Buddy</h1>
+
+  <input id="msg" placeholder="Ask a question..." />
+  <button onclick="send()">Send</button>
+
+  <pre id="chat"></pre>
+
+  <script>
+    // Use your Worker URL here. Pages only serves static files and returns 405 for POST.
+    const API_URL = "http://localhost:8787";
+
+    async function send() {
+      const message = document.getElementById("msg").value;
+      if (!message.trim()) return;
+
+      const chat = document.getElementById("chat");
+      chat.textContent += "\nYou: " + message + "\n";
+
+      try {
+        const res = await fetch(API_URL + "/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message })
+        });
+
+        if (!res.ok) {
+          const text = await res.text();
+          chat.textContent += "AI: [Error " + res.status + "] " + (text || res.statusText) + "\n";
+          return;
+        }
+
+        const data = await res.json();
+        chat.textContent += "AI: " + (data.reply || "(no reply)") + "\n";
+      } catch (err) {
+        chat.textContent += "AI: [Error] " + err.message + "\n";
+      }
+    }
+  </script>
+</body>
+</html>

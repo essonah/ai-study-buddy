@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI Study Buddy</title>
+</head>
+<body>
+  <h1>AI Interview Study Buddy</h1>
+  <input id="msg" placeholder="Ask a question..." />
+  <button onclick="send()">Send</button>
+  <pre id="chat"></pre>
+
+  <script>
+    async function send() {
+      const message = document.getElementById("msg").value;
+
+      const res = await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message })
+      });
+
+      const data = await res.json();
+
+      document.getElementById("chat").textContent +=
+        "\nYou: " + message + "\nAI: " + data.reply + "\n";
+    }
+  </script>
+</body>
+</html>
